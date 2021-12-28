@@ -38,13 +38,16 @@
     <h3>Remote Table</h3>
     <remote-table/>
     <h3>Grouped Table</h3>
-     <grouped-table></grouped-table>
+    <grouped-table></grouped-table>
+    <h3>Expandable Table</h3>
+    <expandable-table></expandable-table>
   </div>
 </template>
 
 <script>
 import GroupedTable from './grouped-table.vue';
 import RemoteTable from './remote-table.vue';
+import ExpandableTable from './expandable-table.vue';
 
 export default {
   name: 'test',
@@ -428,6 +431,7 @@ export default {
   components: {
     'grouped-table': GroupedTable,
     RemoteTable,
+    ExpandableTable
   },
 };
 </script>

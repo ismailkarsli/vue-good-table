@@ -215,56 +215,67 @@
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
-            <tr
-              v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
-              v-for="(row, index) in headerRow.children"
-              :key="row.originalIndex"
-              :class="getRowStyleClass(row)"
-              @mouseenter="onMouseenter(row, index)"
-              @mouseleave="onMouseleave(row, index)"
-              @dblclick="onRowDoubleClicked(row, index, $event)"
-              @click="onRowClicked(row, index, $event)"
-              @auxclick="onRowAuxClicked(row, index, $event)">
-              <th
-                v-if="lineNumbers"
-                class="line-numbers"
+            <template v-for="(row, index) in headerRow.children">
+              <tr
+                v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
+                :key="row.originalIndex"
+                :class="getRowStyleClass(row)"
+                @mouseenter="onMouseenter(row, index)"
+                @mouseleave="onMouseleave(row, index)"
+                @dblclick="onRowDoubleClicked(row, index, $event)"
+                @click="onRowClicked(row, index, $event)"
+                @auxclick="onRowAuxClicked(row, index, $event)"
               >
-                {{ getCurrentIndex(row.originalIndex) }}
-              </th>
-              <th
-                v-if="selectable"
-                @click.stop="onCheckboxClicked(row, index, $event)"
-                class="vgt-checkbox-col"
-              >
-                <input
-                  type="checkbox"
-                  :disabled="row.vgtDisabled"
-                  :checked="row.vgtSelected"
-                />
-              </th>
-              <td
-                @click="onCellClicked(row, column, index, $event)"
-                v-for="(column, i) in columns"
-                :key="i"
-                :class="getClasses(i, 'td', row)"
-                v-if="!column.hidden && column.field"
-                v-bind:data-label="compactMode ? column.label : undefined"
-              >
-                <slot
-                  name="table-row"
-                  :row="row"
-                  :column="column"
-                  :formattedRow="formattedRow(row)"
-                  :index="index"
+                <th v-if="lineNumbers" class="line-numbers">
+                  {{ getCurrentIndex(row.originalIndex) }}
+                </th>
+                <th
+                  v-if="selectable"
+                  @click.stop="onCheckboxClicked(row, index, $event)"
+                  class="vgt-checkbox-col"
                 >
-                  <span v-if="!column.html">
-                    {{ collectFormatted(row, column) }}
-                  </span>
-                  <span v-else v-html="collect(row, column.field)">
-                  </span>
-                </slot>
-              </td>
-            </tr>
+                  <input
+                    type="checkbox"
+                    :disabled="row.vgtDisabled"
+                    :checked="row.vgtSelected"
+                  />
+                </th>
+                <template v-for="(column, i) in columns">
+                  <td
+                    @click="onCellClicked(row, column, index, $event)"
+                    :key="i"
+                    :class="getClasses(i, 'td', row)"
+                    v-if="!column.hidden && column.field"
+                    v-bind:data-label="compactMode ? column.label : undefined"
+                  >
+                    <slot
+                      name="table-row"
+                      :row="row"
+                      :column="column"
+                      :formattedRow="formattedRow(row)"
+                      :index="index"
+                      :toggleExpand="() => toggleExpandedLine(index)"
+                    >
+                      <span v-if="!column.html">
+                        {{ collectFormatted(row, column) }}
+                      </span>
+                      <span v-else v-html="collect(row, column.field)"> </span>
+                    </slot>
+                  </td>
+                </template>
+              </tr>
+              <tr v-if="hasExpandedSlot && expandedLine === index" :key="'expansion-of-' + row.originalIndex">
+                <td :colspan="columns.length">
+                  <slot
+                    name="table-line-expanded"
+                    :row="row"
+                    :formattedRow="formattedRow(row)"
+                    :index="index"
+                    :toggleExpand="() => toggleExpandedLine(index)">
+                  </slot>
+                </td>
+              </tr>
+            </template>
             <!-- if group row header is at the bottom -->
             <vgt-header-row
               v-if="groupHeaderOnBottom"
@@ -479,6 +490,9 @@ export default {
     maintainExpanded: true,
     expandedRowKeys: new Set(),
 
+    // Expanded line
+    expandedLine: null,
+
     // internal sort options
     sortable: true,
     defaultSortBy: null,
@@ -584,6 +598,9 @@ export default {
     },
     hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
+    },
+    hasExpandedSlot() {
+      return !!this.$slots['table-line-expanded'] || !!this.$scopedSlots['table-line-expanded'];
     },
     wrapperStyles() {
       return {
@@ -1021,6 +1038,14 @@ export default {
         this.$set(row, 'vgtIsExpanded', false);
         this.expandedRowKeys.clear();
       });
+    },
+
+    toggleExpandedLine(index){
+      if(!index && index !== 0) {
+        this.expandedLine = null;
+        return
+      }
+      this.expandedLine = this.expandedLine === index ? null : index;
     },
 
     getColumnForField(field) {
