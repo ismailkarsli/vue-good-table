@@ -1,5 +1,6 @@
 # Vue-good-table
 
+
 [![npm](https://img.shields.io/npm/dm/vue-good-table.svg?style=flat-square)](https://www.npmjs.com/package/vue-good-table)
 [![npm](https://img.shields.io/github/package-json/v/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/releases)
 [![npm](https://img.shields.io/github/license/xaksis/vue-good-table.svg?style=flat-square)](https://github.com/xaksis/vue-good-table/blob/master/LICENSE)
@@ -7,11 +8,10 @@
 
 An easy to use, clean and powerful data table for VueJS with essential features like sorting, column filtering, pagination and much more - [xaksis.github.io/vue-good-table/](https://xaksis.github.io/vue-good-table/)
 
-
-| :bangbang: Vue 3 Update |
-|:---------------------------|
-| @borisflesch is working on a Vue 3 compatible version of VGT . Please follow/contribute to his repository as it gets production ready: [vue-good-table-next](https://github.com/borisflesch/vue-good-table-next)|
- 
+#### This is modified version of vue-good-table with expandable line.
+expanded line slot: table-line-expanded
+to toggle, use: toggleExpand function attribute.
+![Advanced Screenshot](README/images/expandable-area.png)
 
 
 <!-- 

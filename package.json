@@ -1,6 +1,6 @@
 {
-  "name": "vue-good-table",
-  "version": "2.21.11",
+  "name": "@fintechyazilim/vue-good-table",
+  "version": "2.21.12",
   "sideEffects": [
     "*.vue",
     "*.css"
@@ -19,17 +19,17 @@
     "docs:build": "vuepress build vp-docs",
     "test": "echo \"No test specified\""
   },
-  "repository": "github:xaksis/vue-good-table",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xaksis/vue-good-table.git"
+  },
   "keywords": [
     "vue",
     "vuejs",
     "table",
     "datatable"
   ],
-  "author": {
-    "name": "xaksis",
-    "email": "shay@crayonbits.com"
-  },
+  "author": "xaksis <shay@crayonbits.com>",
   "license": "MIT",
   "poi": {
     "entry": "dev/main.js",
@@ -57,5 +57,13 @@
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "vuepress": "^1.0.0-rc.1"
+  },
+  "bugs": {
+    "url": "https://github.com/xaksis/vue-good-table/issues"
+  },
+  "homepage": "https://github.com/xaksis/vue-good-table#readme",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   }
 }
