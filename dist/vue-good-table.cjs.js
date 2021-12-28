@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.11
+ * vue-good-table v2.21.12
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -8668,6 +8668,8 @@ var script$6 = {
       // keys for rows that are currently expanded
       maintainExpanded: true,
       expandedRowKeys: new Set(),
+      // Expanded line
+      expandedLine: null,
       // internal sort options
       sortable: true,
       defaultSortBy: null,
@@ -8759,6 +8761,9 @@ var script$6 = {
     },
     hasFooterSlot: function hasFooterSlot() {
       return !!this.$slots['table-actions-bottom'];
+    },
+    hasExpandedSlot: function hasExpandedSlot() {
+      return !!this.$slots['table-line-expanded'] || !!this.$scopedSlots['table-line-expanded'];
     },
     wrapperStyles: function wrapperStyles() {
       return {
@@ -9168,6 +9173,14 @@ var script$6 = {
 
         _this5.expandedRowKeys.clear();
       });
+    },
+    toggleExpandedLine: function toggleExpandedLine(index) {
+      if (!index && index !== 0) {
+        this.expandedLine = null;
+        return;
+      }
+
+      this.expandedLine = this.expandedLine === index ? null : index;
     },
     getColumnForField: function getColumnForField(field) {
       for (var i = 0; i < this.typedColumns.length; i += 1) {
@@ -10080,7 +10093,7 @@ var __vue_render__$6 = function __vue_render__() {
         }
       }], null, true)
     }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
-      return (_vm.groupOptions.collapsable ? headerRow.vgtIsExpanded : true) ? _c('tr', {
+      return [(_vm.groupOptions.collapsable ? headerRow.vgtIsExpanded : true) ? _c('tr', {
         key: row.originalIndex,
         "class": _vm.getRowStyleClass(row),
         on: {
@@ -10102,7 +10115,7 @@ var __vue_render__$6 = function __vue_render__() {
         }
       }, [_vm.lineNumbers ? _c('th', {
         staticClass: "line-numbers"
-      }, [_vm._v("\n              " + _vm._s(_vm.getCurrentIndex(row.originalIndex)) + "\n            ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
+      }, [_vm._v("\n                " + _vm._s(_vm.getCurrentIndex(row.originalIndex)) + "\n              ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
         staticClass: "vgt-checkbox-col",
         on: {
           "click": function click($event) {
@@ -10119,7 +10132,7 @@ var __vue_render__$6 = function __vue_render__() {
           "checked": row.vgtSelected
         }
       })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
-        return !column.hidden && column.field ? _c('td', {
+        return [!column.hidden && column.field ? _c('td', {
           key: i,
           "class": _vm.getClasses(i, 'td', row),
           attrs: {
@@ -10130,7 +10143,7 @@ var __vue_render__$6 = function __vue_render__() {
               return _vm.onCellClicked(row, column, index, $event);
             }
           }
-        }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                  " + _vm._s(_vm.collectFormatted(row, column)) + "\n                ")]) : _c('span', {
+        }, [_vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                      " + _vm._s(_vm.collectFormatted(row, column)) + "\n                    ")]) : _c('span', {
           domProps: {
             "innerHTML": _vm._s(_vm.collect(row, column.field))
           }
@@ -10138,9 +10151,25 @@ var __vue_render__$6 = function __vue_render__() {
           "row": row,
           "column": column,
           "formattedRow": _vm.formattedRow(row),
-          "index": index
-        })], 2) : _vm._e();
-      })], 2) : _vm._e();
+          "index": index,
+          "toggleExpand": function toggleExpand() {
+            return _vm.toggleExpandedLine(index);
+          }
+        })], 2) : _vm._e()];
+      })], 2) : _vm._e(), _vm._v(" "), _vm.hasExpandedSlot && _vm.expandedLine === index ? _c('tr', {
+        key: 'expansion-of-' + row.originalIndex
+      }, [_c('td', {
+        attrs: {
+          "colspan": _vm.columns.length
+        }
+      }, [_vm._t("table-line-expanded", null, {
+        "row": row,
+        "formattedRow": _vm.formattedRow(row),
+        "index": index,
+        "toggleExpand": function toggleExpand() {
+          return _vm.toggleExpandedLine(index);
+        }
+      })], 2)]) : _vm._e()];
     }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('vgt-header-row', {
       attrs: {
         "header-row": headerRow,
