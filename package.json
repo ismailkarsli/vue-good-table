@@ -1,6 +1,6 @@
 {
   "name": "@fintechyazilim/vue-good-table",
-  "version": "2.21.13",
+  "version": "2.21.14",
   "sideEffects": [
     "*.vue",
     "*.css"

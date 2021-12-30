@@ -1,5 +1,5 @@
 /**
- * vue-good-table v2.21.12
+ * vue-good-table v2.21.13
  * (c) 2018-present xaksis <shay@crayonbits.com>
  * https://github.com/xaksis/vue-good-table
  * Released under the MIT License.
@@ -9273,7 +9273,9 @@ var script$6 = {
       };
     },
     pageChanged: function pageChanged(pagination) {
-      this.currentPage = pagination.currentPage;
+      this.currentPage = pagination.currentPage; // reset expanded line
+
+      this.expandedLine = null;
 
       if (!pagination.noEmit) {
         var pageChangedEvent = this.pageChangedEvent();
@@ -9297,8 +9299,10 @@ var script$6 = {
 
       if (this.$refs.paginationBottom && (paginationPosition === 'bottom' || paginationPosition === 'both')) {
         this.$refs.paginationBottom.currentPerPage = this.currentPerPage;
-      } //* update perPage also
+      } // reset expanded line
 
+
+      this.expandedLine = null; //* update perPage also
 
       var perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
@@ -9311,7 +9315,9 @@ var script$6 = {
       this.sorts = sorts;
       this.$emit('on-sort-change', sorts); // every time we change sort we need to reset to page 1
 
-      this.changePage(1); // if the mode is remote, we don't need to do anything
+      this.changePage(1); // reset expanded line
+
+      this.expandedLine = null; // if the mode is remote, we don't need to do anything
       // after this. just set table loading to true
 
       if (this.mode === 'remote') {
