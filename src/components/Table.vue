@@ -1137,6 +1137,9 @@ export default {
 
     pageChanged(pagination) {
       this.currentPage = pagination.currentPage;
+
+      // reset expanded line
+      this.expandedLine = null;
       if (!pagination.noEmit) {
         const pageChangedEvent = this.pageChangedEvent();
         pageChangedEvent.prevPage = pagination.prevPage;
@@ -1158,6 +1161,10 @@ export default {
       if (this.$refs.paginationBottom && (paginationPosition === 'bottom' || paginationPosition === 'both')) {
         this.$refs.paginationBottom.currentPerPage = this.currentPerPage
       }
+
+      // reset expanded line
+      this.expandedLine = null;
+
       //* update perPage also
       const perPageChangedEvent = this.pageChangedEvent();
       this.$emit('on-per-page-change', perPageChangedEvent);
@@ -1172,6 +1179,9 @@ export default {
 
       // every time we change sort we need to reset to page 1
       this.changePage(1);
+
+      // reset expanded line
+      this.expandedLine = null;
 
       // if the mode is remote, we don't need to do anything
       // after this. just set table loading to true

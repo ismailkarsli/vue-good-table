@@ -1,12 +1,19 @@
 <template>
   <div>
-    <vue-good-table :columns="columns" :rows="rows">
+    <vue-good-table :columns="columns" :rows="rows" :pagination-options="{
+      enabled: true,
+      perPage: 3,
+      perPageDropdown: [3, 5, 10, 20],
+      dropdownAllowAll: false,
+    }">
       <template v-slot:table-row="{ toggleExpand, column, formattedRow }"
         ><div @click="toggleExpand">
           {{ formattedRow[column.field] }}
         </div></template
       >
-      <template v-slot:table-line-expanded="props"> Props: {{ props }}</template>
+      <template v-slot:table-line-expanded="props">
+        Props: {{ props }}</template
+      >
     </vue-good-table>
   </div>
 </template>
